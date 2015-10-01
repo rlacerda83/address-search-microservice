@@ -15,10 +15,10 @@ class AddressTableSeeder extends Seeder
         $this->command->info('Start AddressSearch seeder!');
 
         ServiceSearch::create([
-            'name'            => 'PostOficce Brazil search',
-            'model_reference' => 'App\Services\AddressSearch\PostOfficeBrazil',
+            'name'              => 'PostOficce Brazil search',
+            'model_reference'   => 'App\Services\AddressSearch\PostOfficeBrazil',
             'country_code'      => 'BR',
-            'status' => 1
+            'status'            => 1,
         ]);
 
         $this->command->info('AddressSearch table seeded!');

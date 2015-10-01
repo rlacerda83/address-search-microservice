@@ -51,7 +51,7 @@ class CountriesController extends BaseController
     {
         $country = $this->repository->findBy('_id', $id);
         if (!$country) {
-            throw new StoreResourceFailedException("Country not found");
+            throw new StoreResourceFailedException('Country not found');
         }
 
         return $this->response->item($country, new BaseTransformer());
