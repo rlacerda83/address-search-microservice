@@ -8,6 +8,6 @@ class BaseModel extends Eloquent
 {
     public static function getTableName()
     {
-        return with(new static)->getTable();
+        return with(new static())->getTable();
     }
 }

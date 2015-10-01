@@ -6,18 +6,16 @@ return [
 
     'connections' => [
 
-        'mongodb' => array(
+        'mongodb' => [
             'driver'   => 'mongodb',
             'host'     => 'localhost',
             'port'     => 27017,
             'username' => '',
             'password' => '',
-            'database' => 'Address'
-        ),
+            'database' => 'Address',
+        ],
 
     ],
 
     'migrations' => 'migrations',
 ];
-
-?>

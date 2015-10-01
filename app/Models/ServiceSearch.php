@@ -6,8 +6,8 @@ use Elocache\Observers\BaseObserver;
 
 class ServiceSearch extends BaseModel
 {
-	protected $collection = 'search_services';
-	protected $connection = 'mongodb';
+    protected $collection = 'search_services';
+    protected $connection = 'mongodb';
 
     protected $fillable = ['name', 'country_code', 'model_reference', 'status'];
 

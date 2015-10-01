@@ -2,19 +2,19 @@
 
 namespace App\Services\AddressSearch\PostOfficeBrazil;
 
-use GuzzleHttp\Client;
 use App\Services\AddressSearch\Response;
 use Cache;
+use GuzzleHttp\Client;
 
 class ViaCep
 {
-	const CAHCE_VIACEP_KEY = 'viacep_';
+    const CAHCE_VIACEP_KEY = 'viacep_';
     const CACHE_MINUTES = 60;
     const URL_VIACEP = 'http://viacep.com.br/ws/[cep]/json/';
 
     public static function getAddress($postalCode)
     {
-    	$cacheKey = md5(self::CAHCE_VIACEP_KEY.$postalCode);
+        $cacheKey = md5(self::CAHCE_VIACEP_KEY.$postalCode);
 
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey, new Response(true));

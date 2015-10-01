@@ -3,10 +3,10 @@
 namespace App\Repositories\Mongo;
 
 use Elocache\Repositories\Eloquent\AbstractRepository;
+use Illuminate\Container\Container as App;
 use Illuminate\Http\Request;
 use QueryParser\ParserRequest;
 use Validator;
-use Illuminate\Container\Container as App;
 
 class CountryRepository extends AbstractRepository
 {
@@ -53,7 +53,7 @@ class CountryRepository extends AbstractRepository
 
     /**
      * @param Request $request
-     * @param int $itemsPage
+     * @param int     $itemsPage
      *
      * @return mixed
      */

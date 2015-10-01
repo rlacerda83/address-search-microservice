@@ -3,13 +3,10 @@
 namespace App\Services\AddressSearch;
 
 use App\Models\ServiceSearch;
-use App\Models\Address;
 use App\Repositories\Mongo\AddressRepository;
-use App\Services\AddressSearch\Response;
 
 abstract class AddressSearchAbstract
 {
-
     /**
      * @var ServiceSearch
      */
@@ -26,7 +23,7 @@ abstract class AddressSearchAbstract
     protected $postalCode;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $cacheForMinutes = 60;
 
@@ -62,12 +59,12 @@ abstract class AddressSearchAbstract
     {
         $result = $this->addressRepository->findByCountryAndPostalCode($this->getModel()->country_code, $this->getPostalCode());
 
-        if (! $result) {
+        if (!$result) {
             return false;
         }
 
         $addressNeedSync = $this->addressNeedSync($result);
-        if (! $addressNeedSync) {
+        if (!$addressNeedSync) {
             return false;
         }
 
@@ -82,21 +79,22 @@ abstract class AddressSearchAbstract
 
         if ($difference >= 6) {
             $this->addressOutSync = $result;
+
             return false;
         }
 
         return true;
     }
 
-    public function updateDatabase(Response $response) 
-    {   
+    public function updateDatabase(Response $response)
+    {
         $arrayUpdate = [
-            'address1' => $response->getAddress(),
+            'address1'     => $response->getAddress(),
             'neighborhood' => $response->getNeighborhood(),
-            'city' => $response->getCity(),
-            'state' => $response->getState(),
-            'zip' => $response->getPostalCode(),
-            'country_code' => $this->getModel()->country_code
+            'city'         => $response->getCity(),
+            'state'        => $response->getState(),
+            'zip'          => $response->getPostalCode(),
+            'country_code' => $this->getModel()->country_code,
         ];
 
         $validation = $this->addressRepository->validateRequest(null, $arrayUpdate);
@@ -106,10 +104,9 @@ abstract class AddressSearchAbstract
 
         if ($this->addressOutSync) {
             $this->addressRepository->update($arrayUpdate, $this->addressOutSync);
-            
         } else {
             $this->addressRepository->create($arrayUpdate);
-        }    
+        }
     }
 
     private function parseResponse($result)
@@ -128,5 +125,4 @@ abstract class AddressSearchAbstract
     abstract public function search();
 
     abstract public function validPostalCode();
-
 }

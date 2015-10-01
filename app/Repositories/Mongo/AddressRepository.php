@@ -3,10 +3,10 @@
 namespace App\Repositories\Mongo;
 
 use Elocache\Repositories\Eloquent\AbstractRepository;
+use Illuminate\Container\Container as App;
 use Illuminate\Http\Request;
 use QueryParser\ParserRequest;
 use Validator;
-use Illuminate\Container\Container as App;
 
 class AddressRepository extends AbstractRepository
 {
@@ -14,9 +14,9 @@ class AddressRepository extends AbstractRepository
 
     public static $rules = [
         'country_code' => 'required|max:3',
-        'city' => 'required',
-        'state' => 'required',
-        'zip' => 'required'
+        'city'         => 'required',
+        'state'        => 'required',
+        'zip'          => 'required',
     ];
 
     public function __construct(App $app)
@@ -43,7 +43,7 @@ class AddressRepository extends AbstractRepository
     {
         $rules = self::$rules;
 
-        if (! count($fields)) {
+        if (!count($fields)) {
             $fields = $request->all();
         }
 
@@ -72,7 +72,7 @@ class AddressRepository extends AbstractRepository
 
     /**
      * @param Request $request
-     * @param int $itemsPage
+     * @param int     $itemsPage
      *
      * @return mixed
      */
@@ -88,7 +88,7 @@ class AddressRepository extends AbstractRepository
         foreach ($paginator->items() as &$item) {
             $item = (object) $item;
             $paginator->offsetSet($key, $item);
-            $key ++;
+            $key++;
         }
 
         return $paginator;
