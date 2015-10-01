@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\V1;
 
 use App\Models\Country;
-use App\Repositories\Eloquent\CountryRepository;
+use App\Repositories\Mongo\CountryRepository;
 use App\Transformers\BaseTransformer;
-use DB;
 use Dingo\Api\Exception\StoreResourceFailedException;
 use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
@@ -35,11 +34,8 @@ class CountriesController extends BaseController
     public function index(Request $request)
     {
         try {
-            //            $user = DB::table('countries')->where('countries.code', 'BR')->get();
-//            print_R($user); die;
             $paginator = $this->repository->findAllPaginate($request);
 
-            //print_R($paginator); die;
             return $this->response->paginator($paginator, new BaseTransformer());
         } catch (QueryParserException $e) {
             throw new StoreResourceFailedException($e->getMessage(), $e->getFields());
@@ -47,15 +43,15 @@ class CountriesController extends BaseController
     }
 
     /**
-     * @param $code
+     * @param $id
      *
      * @return mixed
      */
-    public function get($code)
+    public function get($id)
     {
-        $country = $this->repository->findBy('code', $code);
+        $country = $this->repository->findBy('_id', $id);
         if (!$country) {
-            throw new StoreResourceFailedException("Country '{$code}' not found");
+            throw new StoreResourceFailedException("Country not found");
         }
 
         return $this->response->item($country, new BaseTransformer());

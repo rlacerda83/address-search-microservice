@@ -63,8 +63,14 @@ class CountryRepository extends AbstractRepository
         $queryParser = new ParserRequest($request, $this->getModel());
         $queryBuilder = $queryParser->parser();
 
-        $paginator = $queryBuilder->paginate($itemsPage);
-        $paginator->appends(app('request')->except('page'));
+        $paginator = $this->cacheQueryBuilder($key, $queryBuilder, 'paginate', $itemsPage);
+
+        $key = 0;
+        foreach ($paginator->items() as &$item) {
+            $item = (object) $item;
+            $paginator->offsetSet($key, $item);
+            $key++;
+        }
 
         return $paginator;
     }
