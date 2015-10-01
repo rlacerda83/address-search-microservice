@@ -2,14 +2,14 @@
 
 namespace App\Services\AddressSearch\PostOfficeBrazil;
 
-use GuzzleHttp\Client;
 use App\Services\AddressSearch\Response;
 use Cache;
+use GuzzleHttp\Client;
 use Yangqi\Htmldom\Htmldom;
 
 class PostOffice
 {
-	const CAHCE_POSTOFFICE_KEY = 'postoffice_';
+    const CAHCE_POSTOFFICE_KEY = 'postoffice_';
     const CACHE_MINUTES = 60;
     const URL_POSTOFFICE_MOBILE = 'http://m.correios.com.br/movel/buscaCepConfirma.do';
 
@@ -17,12 +17,12 @@ class PostOffice
     {
         $params = [
             'cepEntrada' => $postalCode,
-			'tipoCep' => '',
-			'cepTemp' => '',
-			'metodo' => 'buscarCep'
+            'tipoCep'    => '',
+            'cepTemp'    => '',
+            'metodo'     => 'buscarCep',
         ];
 
-    	$cacheKey = md5(self::CAHCE_POSTOFFICE_KEY. $postalCode);
+        $cacheKey = md5(self::CAHCE_POSTOFFICE_KEY.$postalCode);
 
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey, new Response(true));
@@ -30,7 +30,7 @@ class PostOffice
 
         $client = new Client();
         $response = $client->request('POST', self::URL_POSTOFFICE_MOBILE, [
-            'form_params' => $params
+            'form_params' => $params,
         ]);
 
         if ($response->getStatusCode() === 200) {
@@ -42,7 +42,7 @@ class PostOffice
 
             $arrayResponse = [];
             $count = 0;
-            foreach($responsePage as $content) {
+            foreach ($responsePage as $content) {
                 $key = self::cleanString($html->find('span.resposta', $count)->plaintext);
                 $arrayResponse[$key] = trim($content->plaintext);
                 $count++;
@@ -60,6 +60,7 @@ class PostOffice
     private static function cleanString($string)
     {
         $value = preg_replace('/(\s+|\:)/', '', $string);
+
         return str_replace('/', '-', $value);
     }
 

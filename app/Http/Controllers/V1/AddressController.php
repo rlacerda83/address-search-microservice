@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\Address;
 use App\Repositories\Mongo\AddressRepository;
 use App\Repositories\Mongo\CountryRepository;
 use App\Transformers\BaseTransformer;
+use Dingo\Api\Exception\DeleteResourceFailedException;
 use Dingo\Api\Exception\StoreResourceFailedException;
 use Dingo\Api\Exception\UpdateResourceFailedException;
-use Illuminate\Http\Request;
 use Dingo\Api\Routing\Helpers;
-use Dingo\Api\Exception\DeleteResourceFailedException;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use QueryParser\QueryParserException;
 
@@ -22,7 +21,6 @@ class AddressController extends BaseController
      * @var AddressRepository
      */
     private $repository;
-
 
     /**
      * @param AddressRepository $repository
@@ -41,7 +39,7 @@ class AddressController extends BaseController
         try {
             $paginator = $this->repository->findAllPaginate($request, 10);
 
-            return $this->response->paginator($paginator, new BaseTransformer);
+            return $this->response->paginator($paginator, new BaseTransformer());
         } catch (QueryParserException $e) {
             throw new StoreResourceFailedException($e->getMessage(), $e->getFields());
         }
@@ -63,7 +61,7 @@ class AddressController extends BaseController
             $this->validCountry($request->input('country_code', ''));
             $address = $this->repository->create($request->all());
 
-            return $this->response->item($address, new BaseTransformer)->setStatusCode(201);
+            return $this->response->item($address, new BaseTransformer())->setStatusCode(201);
         } catch (\Exception $e) {
             throw new StoreResourceFailedException($e->getMessage());
         }
@@ -73,13 +71,14 @@ class AddressController extends BaseController
      * @param Request $request
      * @param $id
      *
-     * @return mixed
      * @throws UpdateResourceFailedException
+     *
+     * @return mixed
      */
     public function update(Request $request, $id)
     {
         $address = $this->repository->findBy('_id', $id);
-        if (! $address) {
+        if (!$address) {
             throw new UpdateResourceFailedException('Register not found');
         }
 
@@ -87,7 +86,7 @@ class AddressController extends BaseController
             $this->validCountry($request->input('country_code', ''));
             $address = $this->repository->update($request->all(), $address);
 
-            return $this->response->item($address, new BaseTransformer);
+            return $this->response->item($address, new BaseTransformer());
         } catch (\Exception $e) {
             throw new StoreResourceFailedException($e->getMessage());
         }
@@ -101,11 +100,11 @@ class AddressController extends BaseController
     public function get($id)
     {
         $address = $this->repository->findBy('_id', $id);
-        if (! $address) {
+        if (!$address) {
             throw new StoreResourceFailedException('Register not found');
         }
 
-        return $this->response->item($address, new BaseTransformer);
+        return $this->response->item($address, new BaseTransformer());
     }
 
     /**
@@ -117,7 +116,7 @@ class AddressController extends BaseController
     {
         try {
             $address = $this->repository->findBy('_id', $id);
-            if (! $address) {
+            if (!$address) {
                 throw new DeleteResourceFailedException('Register not found');
             }
 
@@ -131,12 +130,13 @@ class AddressController extends BaseController
 
     /**
      * @param $code
+     *
      * @return mixed
      */
     protected function validCountry($code)
     {
         $country = $this->countryRepository->findBy('code', $code);
-        if (! $country) {
+        if (!$country) {
             throw new UpdateResourceFailedException("Country '{$code}' not found");
         }
 

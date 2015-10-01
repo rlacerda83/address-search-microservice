@@ -2,21 +2,20 @@
 
 namespace App\Repositories\Mongo;
 
-use App\Models\Country;
 use Elocache\Repositories\Eloquent\AbstractRepository;
+use Illuminate\Container\Container as App;
 use Illuminate\Http\Request;
 use QueryParser\ParserRequest;
 use Validator;
-use Illuminate\Container\Container as App;
 
 class ServicesSearchRepository extends AbstractRepository
 {
     protected $enableCaching = true;
 
     public static $rules = [
-        'name' => 'required|max:150',
+        'name'            => 'required|max:150',
         'model_reference' => 'required',
-        'country_code' => 'required'
+        'country_code'    => 'required',
     ];
 
     /**
@@ -49,7 +48,7 @@ class ServicesSearchRepository extends AbstractRepository
 
     /**
      * @param Request $request
-     * @param int $itemsPage
+     * @param int     $itemsPage
      *
      * @return mixed
      */
@@ -65,7 +64,7 @@ class ServicesSearchRepository extends AbstractRepository
         foreach ($paginator->items() as &$item) {
             $item = (object) $item;
             $paginator->offsetSet($key, $item);
-            $key ++;
+            $key++;
         }
 
         return $paginator;

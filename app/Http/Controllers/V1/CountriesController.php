@@ -5,12 +5,12 @@ namespace App\Http\Controllers\V1;
 use App\Models\Country;
 use App\Repositories\Eloquent\CountryRepository;
 use App\Transformers\BaseTransformer;
+use DB;
 use Dingo\Api\Exception\StoreResourceFailedException;
-use Illuminate\Http\Request;
 use Dingo\Api\Routing\Helpers;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use QueryParser\QueryParserException;
-use DB;
 
 class CountriesController extends BaseController
 {
@@ -35,12 +35,12 @@ class CountriesController extends BaseController
     public function index(Request $request)
     {
         try {
-//            $user = DB::table('countries')->where('countries.code', 'BR')->get();
+            //            $user = DB::table('countries')->where('countries.code', 'BR')->get();
 //            print_R($user); die;
             $paginator = $this->repository->findAllPaginate($request);
 
             //print_R($paginator); die;
-            return $this->response->paginator($paginator, new BaseTransformer);
+            return $this->response->paginator($paginator, new BaseTransformer());
         } catch (QueryParserException $e) {
             throw new StoreResourceFailedException($e->getMessage(), $e->getFields());
         }
@@ -48,15 +48,16 @@ class CountriesController extends BaseController
 
     /**
      * @param $code
+     *
      * @return mixed
      */
     public function get($code)
     {
         $country = $this->repository->findBy('code', $code);
-        if (! $country) {
+        if (!$country) {
             throw new StoreResourceFailedException("Country '{$code}' not found");
         }
 
-        return $this->response->item($country, new BaseTransformer);
+        return $this->response->item($country, new BaseTransformer());
     }
 }

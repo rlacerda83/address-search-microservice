@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\ServiceSearch;
 use App\Models\Country;
-use App\Repositories\Mongo\ServicesSearchRepository;
-use App\Repositories\Mongo\CountryRepository;
+use App\Models\ServiceSearch;
 use App\Repositories\Mongo\AddressRepository;
-use App\Services\ServicesSearch\PostOfficeBrazil;
+use App\Repositories\Mongo\CountryRepository;
+use App\Repositories\Mongo\ServicesSearchRepository;
 use App\Transformers\BaseTransformer;
+use Dingo\Api\Exception\DeleteResourceFailedException;
 use Dingo\Api\Exception\StoreResourceFailedException;
 use Dingo\Api\Exception\UpdateResourceFailedException;
-use Illuminate\Http\Request;
 use Dingo\Api\Routing\Helpers;
-use Dingo\Api\Exception\DeleteResourceFailedException;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use QueryParser\QueryParserException;
 
@@ -38,8 +37,8 @@ class ServicesSearchController extends BaseController
 
     /**
      * @param ServicesSearchRepository $repository
-     * @param CountryRepository $countryRepository
-     * @param AddressRepository $countryRepository
+     * @param CountryRepository        $countryRepository
+     * @param AddressRepository        $countryRepository
      */
     public function __construct(ServicesSearchRepository $repository, CountryRepository $countryRepository, AddressRepository $addressRepository)
     {
@@ -56,7 +55,7 @@ class ServicesSearchController extends BaseController
         try {
             $paginator = $this->repository->findAllPaginate($request, 10);
 
-            return $this->response->paginator($paginator, new BaseTransformer);
+            return $this->response->paginator($paginator, new BaseTransformer());
         } catch (QueryParserException $e) {
             throw new StoreResourceFailedException($e->getMessage(), $e->getFields());
         }
@@ -79,7 +78,7 @@ class ServicesSearchController extends BaseController
         try {
             $serviceSearch = $this->repository->create($request->all());
 
-            return $this->response->item($serviceSearch, new BaseTransformer)->setStatusCode(201);
+            return $this->response->item($serviceSearch, new BaseTransformer())->setStatusCode(201);
         } catch (\Exception $e) {
             throw new StoreResourceFailedException($e->getMessage());
         }
@@ -89,13 +88,14 @@ class ServicesSearchController extends BaseController
      * @param Request $request
      * @param $id
      *
-     * @return mixed
      * @throws UpdateResourceFailedException
+     *
+     * @return mixed
      */
     public function update(Request $request, $id)
     {
         $serviceSearch = $this->repository->findBy('_id', $id);
-        if (! $serviceSearch) {
+        if (!$serviceSearch) {
             throw new UpdateResourceFailedException('Register not found');
         }
 
@@ -103,7 +103,7 @@ class ServicesSearchController extends BaseController
             $this->validCountry($request->input('country_code', ''));
             $serviceSearch = $this->repository->update($request->all(), $serviceSearch);
 
-            return $this->response->item($serviceSearch, new BaseTransformer);
+            return $this->response->item($serviceSearch, new BaseTransformer());
         } catch (\Exception $e) {
             throw new StoreResourceFailedException($e->getMessage());
         }
@@ -117,11 +117,11 @@ class ServicesSearchController extends BaseController
     public function get($id)
     {
         $serviceSearch = $this->repository->findBy('_id', $id);
-        if (! $serviceSearch) {
+        if (!$serviceSearch) {
             throw new StoreResourceFailedException('Register not found');
         }
 
-        return $this->response->item($serviceSearch, new BaseTransformer);
+        return $this->response->item($serviceSearch, new BaseTransformer());
     }
 
     /**
@@ -133,7 +133,7 @@ class ServicesSearchController extends BaseController
     {
         try {
             $serviceSearch = $this->repository->findBy('_id', $id);
-            if (! $serviceSearch) {
+            if (!$serviceSearch) {
                 throw new DeleteResourceFailedException('Register not found');
             }
 
@@ -152,13 +152,13 @@ class ServicesSearchController extends BaseController
         $countryCode = $request->input('country_code', '');
         $this->validCountry($countryCode);
 
-        if (! strlen($postalCode)) {
-            throw new StoreResourceFailedException("Invalid postal code '{$code}'");    
+        if (!strlen($postalCode)) {
+            throw new StoreResourceFailedException("Invalid postal code '{$code}'");
         }
 
         $model = ServiceSearch::where('country_code', $countryCode)->first();
-        if (! $model) {
-            throw new StoreResourceFailedException("Service search not found to country '{$countryCode}'");    
+        if (!$model) {
+            throw new StoreResourceFailedException("Service search not found to country '{$countryCode}'");
         }
 
         $searchService = new $model->model_reference($model, $this->addressRepository);
@@ -170,12 +170,13 @@ class ServicesSearchController extends BaseController
 
     /**
      * @param $code
+     *
      * @return mixed
      */
     protected function validCountry($code)
     {
         $country = $this->countryRepository->findBy('code', $code);
-        if (! $country) {
+        if (!$country) {
             throw new UpdateResourceFailedException("Country '{$code}' not found");
         }
 
