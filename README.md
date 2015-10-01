@@ -9,10 +9,14 @@ Package that allows you to search address by postal code (ZIP).
 
 For now only available search for Brazil.
 
+This package uses MongoDB database.
+
 ## Current Features  
 - List, add, edit and remove search services
 - List countries
 - Search address by postcode
+- Save and automatically updates new found addresses
+- Everthing is cached
 
 ## Upcoming Features
 - Address search to EUA
