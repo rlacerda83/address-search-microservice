@@ -49,7 +49,7 @@ class PostOfficeBrazil extends AddressSearchAbstract
             }
         }
 
-        if (!$response) {
+        if ($response->getError()) {
             $response = $this->getByViaCep();
             if (!strlen($response->getError())) {
                 $this->updateDatabase($response);

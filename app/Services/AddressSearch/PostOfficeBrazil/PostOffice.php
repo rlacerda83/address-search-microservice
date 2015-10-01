@@ -36,7 +36,7 @@ class PostOffice
         if ($response->getStatusCode() === 200) {
             $result = $response->getBody();
             $html = new Htmldom($result);
-            $ret = $html->find('div[class=caixacampobranco]');
+            $html->find('div[class=caixacampobranco]');
 
             $responsePage = $html->find('span.respostadestaque');
 
