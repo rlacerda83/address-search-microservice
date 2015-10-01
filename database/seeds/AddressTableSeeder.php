@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\AddressSearch;
-use App\Models\Country;
+use App\Models\ServiceSearch;
 use Illuminate\Database\Seeder;
 
 class AddressTableSeeder extends Seeder
@@ -15,11 +14,11 @@ class AddressTableSeeder extends Seeder
     {
         $this->command->info('Start AddressSearch seeder!');
 
-        $country = Country::find(30);
-        AddressSearch::create([
+        ServiceSearch::create([
             'name'            => 'PostOficce Brazil search',
-            'model_reference' => '\App\Services\AddressSearch\PostOfficeBrazil',
-            'country_id'      => $country->id,
+            'model_reference' => 'App\Services\AddressSearch\PostOfficeBrazil',
+            'country_code'      => 'BR',
+            'status' => 1
         ]);
 
         $this->command->info('AddressSearch table seeded!');

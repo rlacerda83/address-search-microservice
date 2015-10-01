@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Country;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+use App\Models\Address;
 
-class CreateCountriesTable extends Migration
+class CreateAddressTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCountriesTable extends Migration
      */
     public function up()
     {
-        Schema::create(Country::getTableName(), function (Blueprint $table) {
+        Schema::create(Address::getTableName(), function (Blueprint $table) {
             $table->timestamps();
         });
     }
@@ -25,8 +25,8 @@ class CreateCountriesTable extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable(Country::getTableName())) {
-            Schema::drop(Country::getTableName());
+        if (Schema::hasTable(Address::getTableName())) {
+            Schema::drop(Address::getTableName());
         }
     }
 }
