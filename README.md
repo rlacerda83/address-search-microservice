@@ -16,7 +16,7 @@ This package uses MongoDB database.
 - List countries
 - Search address by postcode
 - Save and automatically updates new found addresses
-- Everthing is cached
+- Everything is cached
 
 ## Upcoming Features
 - Address search to EUA
