@@ -1,7 +1,7 @@
 {
     "name": "rlacerda83/address-search-microservice",
     "description": "Microservice for postal code search.",
-    "keywords": ["postalcode", "laravel", "lumen", "microservice", "zip", "cep", "ups", "correios"],
+    "keywords": ["postalcode", "laravel", "lumen", "microservice", "zip", "cep", "ups", "correios", "mongodb"],
     "license": "MIT",
     "type": "project",
     "require": {
